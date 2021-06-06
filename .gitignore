@@ -1,1 +1,3 @@
-./*/*.tar.gz
+*_Data/*.tar.gz
+.ipynb_checkpoints
+

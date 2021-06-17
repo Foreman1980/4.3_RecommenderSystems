@@ -5,7 +5,7 @@ import pandas as pd
 def prefilter_items(data):
 
     # исключим из данных продажи с нулевым "quantity"
-    data = data[data['quantity'] < 1]
+    data = data[data['quantity'] >= 1]
     
     popularity = data.groupby('item_id')['user_id'].nunique().reset_index()
     popularity.rename(columns={'user_id': 'share_unique_users'}, inplace=True)
@@ -33,6 +33,7 @@ def prefilter_items(data):
     data = data[data['item_id'].isin(interest_items)]
     
     # ...
+    return data
     
 def postfilter_items(user_id, recommednations):
     pass

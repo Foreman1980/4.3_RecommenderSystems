@@ -2,3 +2,5 @@
 *_Data/*.csv
 .ipynb_checkpoints
 predictions/
+__pycache__/
+src/__pycache__/

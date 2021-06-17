@@ -7,6 +7,9 @@ def prefilter_items(data):
     # исключим из данных продажи с нулевым "quantity"
     data = data[data['quantity'] >= 1]
     
+    # исключим из данных продажи с нулевым "sales_value"
+    data = data[data['sales_value'] > 0]
+    
     popularity = data.groupby('item_id')['user_id'].nunique().reset_index()
     popularity.rename(columns={'user_id': 'share_unique_users'}, inplace=True)
     popularity['share_unique_users'] = popularity['share_unique_users'] / data['user_id'].nunique()
@@ -24,6 +27,7 @@ def prefilter_items(data):
     # Уберем не интересные для рекоммендаций категории (department)
     # пока ничего не будем убирать    
     
+#     data['price'] = data['sales_value'] / (np.maximum(data['quantity'], 1))
     # Уберем слишком дешевые товары (на них не заработаем). 1 покупка из рассылок стоит 60 руб.
     # И слишком дорогие товары
     products_price = data[['item_id', 'quantity', 'sales_value']]

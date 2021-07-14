@@ -7,9 +7,9 @@ def prefilter_items(data, take_n_popular=5000, item_features=None):
     set_of_excluded_items = set()
     
     # определяем все продажи с нулевым "quantity"
-    products_quantity = data.groupby('item_id')['quantity'].sum().reset_index()
-    zero_quantity_sales_items = products_quantity[products_quantity['quantity'] < 1]['item_id'].unique().tolist()
-    set_of_excluded_items.update(zero_quantity_sales_items)
+#     products_quantity = data.groupby('item_id')['quantity'].sum().reset_index()
+#     zero_quantity_sales_items = products_quantity[products_quantity['quantity'] < 1]['item_id'].unique().tolist()
+#     set_of_excluded_items.update(zero_quantity_sales_items)
     
     # определим товары, которые не продавались за последние 12 месяцев (последние 52 недели)
     old_item = list(set(data[data['week_no'] < data['week_no'].max() - 52].item_id.unique().tolist())
@@ -18,22 +18,22 @@ def prefilter_items(data, take_n_popular=5000, item_features=None):
     
     # определим слишком дешевые товары (на них не заработаем). 1 покупка из рассылок стоит 60 руб.
     # и слишком дорогие товары
-    products_price = data[['item_id', 'quantity', 'sales_value']].copy()
+#     products_price = data[['item_id', 'quantity', 'sales_value']].copy()
 
-    products_price['price'] = products_price['sales_value'] / np.maximum(products_price['quantity'], 1)
-    products_price = products_price.groupby('item_id')['price'].mean().reset_index()
+#     products_price['price'] = products_price['sales_value'] / np.maximum(products_price['quantity'], 1)
+#     products_price = products_price.groupby('item_id')['price'].mean().reset_index()
 
-    noninterest_items = products_price[~products_price['price'].between(2, 100)].item_id.unique().tolist()
-    set_of_excluded_items.update(noninterest_items)
+#     noninterest_items = products_price[~products_price['price'].between(2, 100)].item_id.unique().tolist()
+#     set_of_excluded_items.update(noninterest_items)
     
     # Уберем самые популярные товары (их и так купят), а также
     # самые НЕ популярные товары (их и так НЕ купят)
-    popular_items = data[~data['item_id'].isin(set_of_excluded_items)].groupby('item_id')['user_id'].nunique().reset_index()
-    popular_items.rename(columns={'user_id': 'n_users'}, inplace=True)
-    popular_items['n_users'] = popular_items['n_users'] / data[~data['item_id'].isin(set_of_excluded_items)]['user_id'].nunique()
+#     popular_items = data[~data['item_id'].isin(set_of_excluded_items)].groupby('item_id')['user_id'].nunique().reset_index()
+#     popular_items.rename(columns={'user_id': 'n_users'}, inplace=True)
+#     popular_items['n_users'] = popular_items['n_users'] / data[~data['item_id'].isin(set_of_excluded_items)]['user_id'].nunique()
     
-    nonpopular_items = popular_items[popular_items['n_users'].between(.03, .4)].item_id.tolist()
-    set_of_excluded_items.update(nonpopular_items)
+#     nonpopular_items = popular_items[popular_items['n_users'].between(.03, .4)].item_id.tolist()
+#     set_of_excluded_items.update(nonpopular_items)
     
     # # Уберем не интересные для рекоммендаций категории (department)
     # if item_features is not None:

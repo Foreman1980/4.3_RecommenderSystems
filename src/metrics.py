@@ -12,7 +12,6 @@ def precision_at_k(recommended_list, bought_list, k=5):
 
 
 def recall_at_k(recommended_list, bought_list, k=5):
-    #   сделать в домашней работе
     return np.isin(bought_list, recommended_list[:k]).sum() / len(bought_list)
 
 
@@ -32,7 +31,6 @@ def ap_k(recommended_list, bought_list, k=5):
 
 
 def map_k(recommended_list, bought_list, k=5):
-    #   сделать в домашней работе
     n = len(recommended_list)
     return sum([ap_k(recommended_list[i], bought_list[i], k) for i in range(n)]) / n
 
